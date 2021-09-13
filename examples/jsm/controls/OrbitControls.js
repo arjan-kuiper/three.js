@@ -167,7 +167,7 @@ class OrbitControls extends EventDispatcher {
 
 			const twoPI = 2 * Math.PI;
 
-			let prevRadius = 999999;
+			let prevRadius = 999999; // this is a hack... have to set it to something...
 
 			return function update() {
 
@@ -189,7 +189,6 @@ class OrbitControls extends EventDispatcher {
 
 				if ( scope.enableDamping ) {
 
-					// suport zoomToCursor (mouse only)
 
 					if ( scope.zoomToCursor ) {
 
@@ -246,7 +245,7 @@ class OrbitControls extends EventDispatcher {
 				spherical.phi = Math.max( scope.minPolarAngle, Math.min( scope.maxPolarAngle, spherical.phi ) );
 
 				spherical.makeSafe();
-// ???
+
 				prevRadius = spherical.radius;
 				spherical.radius *= scale;
 
@@ -620,6 +619,8 @@ class OrbitControls extends EventDispatcher {
 
 		const updateMouse3D = function () {
 
+			// compute the point under the mouse and in the plane that (1) contains target, and (2) is orthogonal to the up vector
+
 			const v = new Vector3();
 			const v1 = new Vector3();
 			let prevRadius = 0;
@@ -631,9 +632,9 @@ class OrbitControls extends EventDispatcher {
 				if ( scope.object.isPerspectiveCamera ) {
 
 					v.set(
-					    ( event.clientX / element.clientWidth ) * 2 - 1,
-					    - ( event.clientY / element.clientHeight ) * 2 + 1,
-					    0.5 );
+						( event.clientX / element.clientWidth ) * 2 - 1,
+						- ( event.clientY / element.clientHeight ) * 2 + 1,
+						0.5 );
 
 					v.unproject( scope.object );
 
@@ -646,9 +647,9 @@ class OrbitControls extends EventDispatcher {
 				} else if ( scope.object.isOrthographicCamera ) {
 
 					v.set(
-					    ( event.clientX / element.clientWidth ) * 2 - 1,
-					    - ( event.clientY / element.clientHeight ) * 2 + 1,
-					    ( scope.object.near + scope.object.far ) / ( scope.object.near - scope.object.far ) );
+						( event.clientX / element.clientWidth ) * 2 - 1,
+						- ( event.clientY / element.clientHeight ) * 2 + 1,
+						( scope.object.near + scope.object.far ) / ( scope.object.near - scope.object.far ) );
 
 					v.unproject( scope.object );
 
@@ -664,8 +665,6 @@ class OrbitControls extends EventDispatcher {
 					console.warn( 'WARNING: OrbitControls.js encountered an unknown camera type.' );
 
 				}
-
-				//console.log( mouse3D );
 
 			};
 
