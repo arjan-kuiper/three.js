@@ -628,12 +628,13 @@ class OrbitControls extends EventDispatcher {
 			return function updateMouse3D( event ) {
 
 				const element = scope.domElement;
+				const canvasBounds = element.getBoundingClientRect();
 
 				if ( scope.object.isPerspectiveCamera ) {
 
 					v.set(
-						( event.clientX / element.clientWidth ) * 2 - 1,
-						- ( event.clientY / element.clientHeight ) * 2 + 1,
+						((event.clientX - canvasBounds.left) / (canvasBounds.right - canvasBounds.left)) * 2 - 1,
+						-((event.clientY - canvasBounds.top) / (canvasBounds.bottom - canvasBounds.top)) * 2 + 1,
 						0.5 );
 
 					v.unproject( scope.object );
@@ -647,8 +648,8 @@ class OrbitControls extends EventDispatcher {
 				} else if ( scope.object.isOrthographicCamera ) {
 
 					v.set(
-						( event.clientX / element.clientWidth ) * 2 - 1,
-						- ( event.clientY / element.clientHeight ) * 2 + 1,
+						((event.clientX - canvasBounds.left) / (canvasBounds.right - canvasBounds.left)) * 2 - 1,
+						-((event.clientY - canvasBounds.top) / (canvasBounds.bottom - canvasBounds.top)) * 2 + 1,
 						( scope.object.near + scope.object.far ) / ( scope.object.near - scope.object.far ) );
 
 					v.unproject( scope.object );
